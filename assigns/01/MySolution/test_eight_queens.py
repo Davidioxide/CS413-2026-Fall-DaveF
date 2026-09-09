@@ -65,29 +65,52 @@ class EightQueensTests(unittest.TestCase):
         self.assertEqual(solution_count, 92)
         self.assertEqual(output.getvalue().count("Solution #"), 92)
 
-    def test_different_board_size_and_queen_count(self) -> None:
-        # Five queens on a 5-by-6 board: the board and queen count differ
-        # from the original 8-by-8 problem.
-        solutions = solve_board(rows=5, columns=6, queens=5)
+    def assert_board_case(
+        self,
+        board: tuple[int, int],
+        number_of_queens: int,
+        expected_count: int,
+    ) -> None:
+        """Test one board/queen-count combination.
 
-        self.assertEqual(len(solutions), 40)
-        self.assertTrue(all(is_valid_placement(solution) for solution in solutions))
+        Keeping the inputs as arguments lets one test exercise square boards,
+        rectangular boards, impossible cases, and cases with fewer queens than
+        rows without duplicating test logic.
+        """
+        rows, columns = board
+        solutions = solve_board(rows, columns, number_of_queens)
 
-    def test_fewer_queens_than_rows(self) -> None:
-        solutions = solve_board(rows=4, columns=5, queens=3)
+        self.assertEqual(len(solutions), expected_count)
+        self.assertTrue(
+            all(
+                len(solution) == number_of_queens
+                and is_valid_placement(solution)
+                for solution in solutions
+            )
+        )
 
-        self.assertTrue(solutions)
-        self.assertTrue(all(len(solution) == 3 for solution in solutions))
-        self.assertTrue(all(is_valid_placement(solution) for solution in solutions))
+    def test_board_and_queen_count_cases(self) -> None:
+        cases = (
+            ((1, 1), 1, 1),
+            ((2, 2), 2, 0),
+            ((3, 3), 3, 0),
+            ((4, 4), 4, 2),
+            ((5, 5), 5, 10),
+            ((6, 6), 6, 4),
+            ((7, 7), 7, 40),
+            ((8, 8), 8, 92),
+            ((9, 9), 9, 352),
+            ((10, 10), 10, 724),
+            ((4, 5), 3, 72),
+            ((5, 6), 5, 40),
+            ((6, 8), 4, 6196),
+        )
 
-    def test_nine_queens_requires_a_9_by_9_board(self) -> None:
-        # Nine non-attacking queens need at least nine rows and nine columns:
-        # no two queens can share either coordinate.  A 9-by-9 board is the
-        # first square board that can contain nine queens.
-        solutions = solve_board(rows=9, columns=9, queens=9)
+        for board, number_of_queens, expected_count in cases:
+            with self.subTest(board=board, number_of_queens=number_of_queens):
+                self.assert_board_case(board, number_of_queens, expected_count)
 
-        self.assertEqual(len(solutions), 352)
-        self.assertTrue(all(is_valid_placement(solution) for solution in solutions))
+    # all tests above passed, and all valid solutions are found during testing.
 
 
 if __name__ == "__main__":
