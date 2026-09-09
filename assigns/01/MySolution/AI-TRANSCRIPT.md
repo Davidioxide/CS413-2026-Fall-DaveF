@@ -19,7 +19,7 @@ please complete the following tasks:
 ```
 
 ```
-Inspect closely on eight_queens.dats and eight_queens.py, make sure that the program behavior of the py file should resemble that of the dats file. If not, inform me. 
+Inspect closely on eight_queens.dats and eight_queens.py, make sure that the program behavior of the py file should resemble that of the dats file. If not, inform me.
 ```
 
 ```
@@ -34,9 +34,13 @@ Write in a separate py file that imports and uses functions from eight_queens.py
  now, in the test set that was established in test_eight_queens, try to make a test case of over 8 queens but on a greater board, and inform me how much bigger must the board be to contain at least one more queen
 ```
 
+```
+ In test_eight_queens.py, add one test function that accepts arguments on board and number of queens, which automizes the testing. Then, testing on different inputs and sample a convincible amount to record within a md file of name "test_log_eight_queens.md"
+```
+
 # AI suggestion on code:
 
-AI largly suggested to make additional security checks and potential optimizations, such as issues regarding ATS compiler and how python code can be optimized. But none of the suggestion was regarding syntax/algorithm. 
+AI largly suggested to make additional security checks and potential optimizations, such as issues regarding ATS compiler and how python code can be optimized. But none of the suggestion was regarding syntax/algorithm.
 
 # Manual changes:
 
