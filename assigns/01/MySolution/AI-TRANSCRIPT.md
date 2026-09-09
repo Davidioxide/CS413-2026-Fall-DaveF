@@ -5,10 +5,16 @@ gpt-5.6-luna medium
 # Prompts:
 
 ```
-please complete the following tasks:
+Inspect upon eight_queens.dats, and check if it solves the eight queens problem. If so, are there any suggestions or improvements to make? If not, where and why is the code failing? Inform me first without making any changes
+```
 
-  1. find the eight_queens.sats under directory MySolution, and create a new python file in the same directory, write inside it the translated python
-  version of eight_queens.sats
+```
+In the test set that was established in test_eight_queens, try to make a test case of over 8 queens but on a greater board, and inform me how much bigger must the board be to contain at least one more queen
+```
+
+```
+please complete the following tasks:
+  1. find the eight_queens.sats under directory MySolution, and create a new python file in the same directory, write inside it the translated python version of eight_queens.sats
   2. find any potential mistakes but don't correct them. Write them in a separate md file with clear structure
 ```
 
