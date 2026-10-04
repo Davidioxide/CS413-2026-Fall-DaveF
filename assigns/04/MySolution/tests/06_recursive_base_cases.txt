@@ -1,0 +1,10 @@
+D0Epair(
+    D0Eapp(
+        D0Efix("fac", "n", D0Eif0(D0Eop2("==", D0Evar("n"), D0Eint(0)), D0Eint(1), D0Eop2("*", D0Evar("n"), D0Eapp(D0Evar("fac"), D0Eop2("-", D0Evar("n"), D0Eint(1)))))),
+        D0Eint(0)
+    ),
+    D0Eapp(
+        D0Efix("fib", "n", D0Eif0(D0Eop2("<=", D0Evar("n"), D0Eint(1)), D0Evar("n"), D0Eop2("+", D0Eapp(D0Evar("fib"), D0Eop2("-", D0Evar("n"), D0Eint(1))), D0Eapp(D0Evar("fib"), D0Eop2("-", D0Evar("n"), D0Eint(2)))))),
+        D0Eint(0)
+    )
+)

@@ -1,0 +1,13 @@
+# The parameter x is bound in the lambda body.
+# The let initializer is intentionally independent of the let binding.
+D0Eapp(
+    D0Elam(
+        "x",
+        D0Elet(
+            "y",
+            D0Eint(2),
+            D0Epair(D0Evar("x"), D0Evar("y"))
+        )
+    ),
+    D0Eint(1)
+)

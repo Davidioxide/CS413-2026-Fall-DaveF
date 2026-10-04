@@ -13,6 +13,16 @@ python3 source/backend.py
 
 Open <http://127.0.0.1:8000>. Tests run with `npm test` (the Python unittest suite). `npm run build` emits browser JavaScript into the ignored `build/` directory; the local server maps browser module requests there.
 
+As an alternative, the program can be run with the Makefile:
+
+```sh
+cd MySolution
+make install
+make run
+```
+
+`make install` installs the dependencies with `npm ci`, and `make run` builds the browser JavaScript before starting the Python server. Open <http://127.0.0.1:8000> after the server starts.
+
 The Factorial and Fibonacci menu examples interpret to `D0Vint(arg1=120)` and `D0Vint(arg1=21)`. Manual input `D0Evar("x")` reports undeclared `x`; replace it with `D0Eint(42)` and Apply changes. `D0Eop2("/", D0Eint(1), D0Eint(0))` passes Lint but reports a runtime failure during Interpret. Type-check and Compile clearly report that they are not implemented; Execute stays disabled because it accepts only a future compiler artifact.
 
 Supported input is one Python `ast` expression made from the `D0E...` constructors in `lambda1.py`, positional arguments, strings, integers, booleans, comments, and multiline formatting. Calls, attributes, imports, comprehensions, and arbitrary Python are rejected. Source is limited to 65,536 UTF-8 bytes. Each request has a two-second response timeout; a future production version should isolate evaluation in a killable worker process for stronger termination guarantees. Known limitations include no persistence, one local user, no real type checker/compiler, and a simple text result view.
