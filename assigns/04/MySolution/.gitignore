@@ -1,0 +1,9 @@
+node_modules/
+build/*.js
+build/*.js.map
+source/*.js
+source/*.js.map
+__pycache__/
+*.pyc
+.pytest_cache/
+.DS_Store
