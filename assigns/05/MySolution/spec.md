@@ -10,15 +10,25 @@ The due date is Tuesday, October 13, 2026.
 
 ## Source-of-truth hierarchy
 
-The `README.md` files under `JAVA/` and `NODE/` are explicit sources of truth
-for the supplied interpreter behavior, runtime expectations, and testing
-conventions. If any other description conflicts with a relevant Java or Node
-README, follow that README.
+When instructions conflict, always follow the highest-priority Markdown file
+in this list. Do not resolve conflicts by mixing requirements from different
+levels.
 
-The assignment instructions in `Assign05.md` define the required deliverables
-and grading requirements. For the actual Python program, AST fields,
-constructors, binding semantics, operators, and interpreter behavior,
-`lambda1.py` and `lambda1_vp.py` are the sources of truth.
+1. `Assign05.md` — highest priority; defines the assignment, deliverables,
+   constraints, and grading requirements.
+2. The `README.md` files under subdirectories, especially
+   `JAVA/README.md` and `NODE/README.md` — define the documented interpreter
+   behavior, runtime expectations, and testing conventions.
+3. This `MySolution/spec.md` — provides the implementation plan and organizes
+   the requirements for work in `MySolution/`.
+
+If a requirement in `spec.md` conflicts with a `README.md`, follow the
+`README.md`. If a `README.md` conflicts with `Assign05.md`, follow
+`Assign05.md`.
+
+For the actual Python program, AST fields, constructors, binding semantics,
+operators, and interpreter behavior, `lambda1.py` and `lambda1_vp.py` are the
+authoritative source files, subject to the Markdown priority above.
 
 `lambda1.py` and `lambda1_vp.py` are the authoritative sources for implementing
 the LAMBDA program. In particular, `lambda1_vp.py` is authoritative for the
@@ -34,6 +44,9 @@ implementation.
 
 - Under no condition may agents modify `AI-TRANSCRIPT.md`. It is a protected
   record and may only be created or changed by the student directly.
+- Agents must not modify `MySolution/README.md`. It is a protected student
+  document and may only be created, edited, or rewritten by the student
+  directly.
 - Agents must not modify `lambda1.py`, `lambda1_vp.py`, or the supplied AST
   classes and interpreter code.
 - Agents must not modify files outside `MySolution/` for the implementation,
@@ -159,7 +172,7 @@ Both suites must independently cover:
 
 ## Required documentation
 
-Create `MySolution/README.md` containing:
+The student must create and maintain `MySolution/README.md`, containing:
 
 - Python 3.12 or later requirement.
 - Setup commands, including installation of pytest.
