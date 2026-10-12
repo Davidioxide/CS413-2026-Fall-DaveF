@@ -22,3 +22,8 @@ update the spec.md such that it emphasizes not to modify `MySolution/README.md`
 ```
 Follow the `MySolution.spec.md` and implement according to the requirements in the specifications.
 ```
+4. Added test cases, and fill into the `README.md` the ways to test.
+```
+In `MySolution/README.md`, write the instructions of how to use the tests in this assignment.
+```
+5. Passed all tests, filling into the `README.md` all the explanation needed.

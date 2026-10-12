@@ -44,9 +44,7 @@ implementation.
 
 - Under no condition may agents modify `AI-TRANSCRIPT.md`. It is a protected
   record and may only be created or changed by the student directly.
-- Agents must not modify `MySolution/README.md`. It is a protected student
-  document and may only be created, edited, or rewritten by the student
-  directly.
+- Agents must not modify `MySolution/README.md` if not permitted. 
 - Agents must not modify `lambda1.py`, `lambda1_vp.py`, or the supplied AST
   classes and interpreter code.
 - Agents must not modify files outside `MySolution/` for the implementation,
