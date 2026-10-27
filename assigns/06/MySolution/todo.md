@@ -63,7 +63,7 @@ Reviewed against `06/Assign06.md` and `06/REQUIREMENTS.md` on 2026-10-26.
 
 ### CLI/parser consistency
 
-- [ ] Add parser regression tests for every supported constructor notation,
+- [x] Add parser regression tests for every supported constructor notation,
   including `D0Elet`, `D0Efix`, all projections, all operators, nested
   constructors, and negative literals.
 

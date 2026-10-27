@@ -61,6 +61,9 @@ The test files are organized by requirement:
 - `tests/test_compiled_purity.py` recursively checks target purity for every
   source constructor/operator and verifies compilation does not invoke the
   evaluator.
+- `tests/test_parser_constructors.py` covers every constructor notation,
+  every supported binary operator, nested constructor expressions, existing
+  surface syntax, and compiler diagnostics for negative literals.
 - `tests/test_app.py` black-box tests the interactive CLI with 125 valid inputs.
 
 The evaluator is intentionally weak CBV and bounded. Open target terms are

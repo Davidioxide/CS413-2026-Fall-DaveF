@@ -49,6 +49,8 @@ class Parser:
     def prefix(self):
         token = self.peek()
         if token == "not": self.take(); return D0Eop1("not", self.expr(6))
+        if token == "-" and self.pos + 1 < len(self.tokens) and self.tokens[self.pos + 1].isdigit():
+            self.take("-"); return D0Eint(-int(self.take()))
         if token == "if":
             self.take(); c = self.expr(); self.take("then"); t = self.expr(); self.take("else"); return D0Eif0(c, t, self.expr())
         if token == "let":
@@ -91,7 +93,9 @@ class Parser:
         """Parse the literal constructor notation used by Assignment 5."""
         name = self.take(); self.take("(")
         if name == "D0Eint":
-            value = int(self.take()); self.take(")"); return D0Eint(value)
+            sign = -1 if self.peek() == "-" else 1
+            if sign == -1: self.take("-")
+            value = sign * int(self.take()); self.take(")"); return D0Eint(value)
         if name == "D0Ebtf":
             value = self.take()
             if value not in ("true", "false", "True", "False"):
