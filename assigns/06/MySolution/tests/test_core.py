@@ -1,12 +1,20 @@
 import copy, os, sys, unittest
-sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../05")))
+from pathlib import Path
+
+_solution = Path(__file__).resolve().parents[1]
+_assigns = next(
+    parent for parent in Path(__file__).resolve().parents
+    if (parent / "05" / "lambda1_vp.py").is_file()
+)
+sys.path.insert(0, str(_solution))
+sys.path.insert(0, str(_assigns / "05"))
 from lambda1_vp import *
 from target import *
 from compiler import compile_expr, CompileError
 from evaluator import eval_target
 from observers import observe_num, observe_bool
 from church import num, TRUE, FALSE, ADD, PRED
+from parser import parse
 
 class CoreTests(unittest.TestCase):
     def test_substitution_capture(self):
@@ -35,5 +43,8 @@ class CoreTests(unittest.TestCase):
         loop = D0Eapp(D0Efix("f", "x", D0Eapp(D0Evar("f"), D0Evar("x"))), D0Eint(0))
         self.assertEqual(observe_bool(eval_target(compile_expr(D0Eop2("and", D0Ebtf(False), loop)), 100).value, 30).value, False)
         self.assertEqual(observe_bool(eval_target(compile_expr(D0Eop2("or", D0Ebtf(True), loop)), 100).value, 30).value, True)
+    def test_constructor_notation_parser(self):
+        self.assertEqual(render(compile_expr(parse('D0Evar("x")'))), "x")
+        self.assertEqual(render(compile_expr(parse('D0Elam("x", D0Evar("x"))'))), "(lam x. x)")
 
 if __name__ == "__main__": unittest.main()

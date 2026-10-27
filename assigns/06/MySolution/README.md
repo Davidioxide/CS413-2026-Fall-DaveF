@@ -9,6 +9,24 @@ PYTHONPATH=MySolution python3 -m unittest discover -s MySolution/tests -p 'test_
 make -C MySolution all
 ```
 
+The interactive compiler is `app.py`. From `assigns/06/`, launch it with:
+
+```text
+python3 MySolution/app.py
+```
+
+Then enter expressions such as `2 + 3 * 4`, `if true then 1 else 0`,
+`let x = 3 in x + 4`, `lam x. x`, or `pair(2, true)`. Type `:help` or
+`:quit`. A one-shot form is also available:
+
+```text
+python3 MySolution/app.py '2 + 3 * 4'
+```
+
+The parser is intentionally a small CLI convenience; library callers should
+continue constructing Assignment 5 AST objects directly. The CLI prints the
+generated target term and does not evaluate or decode it.
+
 The demo runs DEMO-01 through DEMO-14 and prints each expected value, execution
 status and beta-step count, observation status/count, decoded value, source
 constructor, and a generated pure-term prefix. Exit status is nonzero if a case
@@ -20,6 +38,8 @@ and capture-avoiding substitution. `church.py` contains closed Church builders.
 `evaluator.py` is the shared source/target evaluator. `compiler.py` implements
 the Assignment 5 visitor method names without importing the Assignment 5 file.
 `observers.py` decodes natural, boolean, and pair results. `demo.py` is the CLI.
+`parser.py` parses interactive source-language expressions and `app.py` is the
+interactive compiler application.
 
 The evaluator is intentionally weak CBV and bounded. Open target terms are
 rejected for execution, although compilation and substitution support them.

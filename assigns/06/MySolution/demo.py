@@ -2,7 +2,15 @@
 """Run the fourteen required end-to-end demonstrations."""
 from __future__ import annotations
 import os, sys
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../../05")))
+from pathlib import Path
+
+# Resolve the repository root from this file, rather than relying on the
+# caller's working directory or a fragile relative import.
+_assigns = next(
+    parent for parent in Path(__file__).resolve().parents
+    if (parent / "05" / "lambda1_vp.py").is_file()
+)
+sys.path.insert(0, str(_assigns / "05"))
 from lambda1_vp import *
 from compiler import compile_expr
 from evaluator import eval_target
