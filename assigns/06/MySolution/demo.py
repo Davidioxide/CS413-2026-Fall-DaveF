@@ -1,16 +1,9 @@
 #!/usr/bin/env python3
 """Run the fourteen required end-to-end demonstrations."""
 from __future__ import annotations
-import os, sys
-from pathlib import Path
-
-# Resolve the repository root from this file, rather than relying on the
-# caller's working directory or a fragile relative import.
-_assigns = next(
-    parent for parent in Path(__file__).resolve().parents
-    if (parent / "05" / "lambda1_vp.py").is_file()
-)
-sys.path.insert(0, str(_assigns / "05"))
+import sys
+from source_path import ASSIGN05
+sys.path.insert(0, str(ASSIGN05))
 from lambda1_vp import *
 from compiler import compile_expr
 from evaluator import eval_target

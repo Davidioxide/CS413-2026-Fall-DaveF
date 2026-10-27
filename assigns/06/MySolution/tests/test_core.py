@@ -2,12 +2,9 @@ import copy, os, sys, unittest
 from pathlib import Path
 
 _solution = Path(__file__).resolve().parents[1]
-_assigns = next(
-    parent for parent in Path(__file__).resolve().parents
-    if (parent / "05" / "lambda1_vp.py").is_file()
-)
 sys.path.insert(0, str(_solution))
-sys.path.insert(0, str(_assigns / "05"))
+from source_path import ASSIGN05
+sys.path.insert(0, str(ASSIGN05))
 from lambda1_vp import *
 from target import *
 from compiler import compile_expr, CompileError

@@ -7,11 +7,8 @@ from __future__ import annotations
 import ast
 import re
 import sys
-from pathlib import Path
-
-_assigns = next(parent for parent in Path(__file__).resolve().parents
-               if (parent / "05" / "lambda1_vp.py").is_file())
-sys.path.insert(0, str(_assigns / "05"))
+from source_path import ASSIGN05
+sys.path.insert(0, str(ASSIGN05))
 from lambda1_vp import (D0Eint, D0Ebtf, D0Evar, D0Elam, D0Eapp,
     D0Eop1, D0Eop2, D0Eif0, D0Elet, D0Epair, D0Epfst, D0Epsnd, D0Efix)
 

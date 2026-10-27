@@ -37,9 +37,31 @@ evaluation is unbounded and is used only as a semantic oracle in tests.
 and capture-avoiding substitution. `church.py` contains closed Church builders.
 `evaluator.py` is the shared source/target evaluator. `compiler.py` implements
 the Assignment 5 visitor method names without importing the Assignment 5 file.
-`observers.py` decodes natural, boolean, and pair results. `demo.py` is the CLI.
-`parser.py` parses interactive source-language expressions and `app.py` is the
-interactive compiler application.
+`observers.py` decodes natural, boolean, and pair results. `demo.py` is the
+batch demonstration runner. `parser.py` parses interactive source-language
+expressions, `app.py` is the interactive compiler application, and
+`source_path.py` resolves `assigns/05/lambda1_vp.py` independently of the
+current working directory.
+
+The test files are organized by requirement:
+
+- `tests/test_church_encodings.py` independently tests exported Church
+  combinator closure, arithmetic, predecessor, comparisons, booleans, pairs,
+  successor, and zero testing.
+- `tests/test_nested_pairs.py` tests recursive pair observation with mixed
+  natural and boolean components.
+- `tests/test_cbv_control.py` tests strict function arguments, let initializers,
+  both pair components, conditionals, and short-circuit operators.
+- `tests/test_recursion_scope.py` tests coincident fix binders, recursive scope,
+  encoding-name collisions, and recursive execution.
+- `tests/test_target_budget.py` tests deterministic reduction, immutability,
+  zero-budget behavior, exhaustion, and final-step completion.
+- `tests/test_observer_edges.py` tests alpha-renamed values, computed encodings,
+  malformed observations, incomplete observations, and observation exhaustion.
+- `tests/test_compiled_purity.py` recursively checks target purity for every
+  source constructor/operator and verifies compilation does not invoke the
+  evaluator.
+- `tests/test_app.py` black-box tests the interactive CLI with 125 valid inputs.
 
 The evaluator is intentionally weak CBV and bounded. Open target terms are
 rejected for execution, although compilation and substitution support them.
