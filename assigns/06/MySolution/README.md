@@ -1,6 +1,9 @@
 # Assignment 6 solution
 
 Demo video:
+https://drive.google.com/file/d/13GQbBUzNzjwpVO0RS7QoKme6dilfQaBj/view?usp=sharing
+
+if it doesn't work, try:
 https://drive.google.com/file/d/1Brwpgh8Fm4kd0JQCRQjTGM_DFwJlIHfF/view?usp=sharing
 
 This is a Python 3.12+ command-line compiler and bounded Church-term evaluator.
