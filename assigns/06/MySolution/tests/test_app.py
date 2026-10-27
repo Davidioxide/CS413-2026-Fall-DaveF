@@ -49,25 +49,49 @@ class InteractiveAppTests(unittest.TestCase):
             'D0Efix("f", "x", D0Elam("y", D0Evar("x")))',
         ])
         self.assertGreaterEqual(len(inputs), 100)
-        result = run_cli(input_text="\n".join(inputs + [":quit\n"]))
+        scripted = []
+        for expression in inputs:
+            scripted.extend((expression, "n"))
+        result = run_cli(input_text="\n".join(scripted + [":quit", ""]))
         self.assertEqual(result.returncode, 0, result.stderr)
-        # Blank input produces adjacent prompts; take the text after the last
-        # prompt on each line and ignore the final prompt emitted by :quit.
-        responses = [line.split("source> ")[-1] for line in result.stdout.splitlines()
-                     if "source> " in line and line.split("source> ")[-1]]
-        self.assertEqual(len(responses), len(inputs), result.stdout[-1000:])
-        for response in responses:
-            self.assertTrue(response and "ERROR" not in response, response)
-            self.assertTrue(response.startswith(("(", "_", "v", "x", "z", "s", "t", "f")), response)
-            self.assertNotRegex(response, r"D0E(?:int|var|lam|app|op|if|let|pair|pfst|psnd|fix)")
+        self.assertEqual(result.stdout.count("Observe value? [y/n]: "), len(inputs))
+        self.assertNotIn("ERROR", result.stdout, result.stdout[-1000:])
+        self.assertNotRegex(result.stdout, r"D0E(?:int|var|lam|app|op|if|let|pair|pfst|psnd|fix)")
 
     def test_one_shot_cli_and_exact_basic_outputs(self):
-        variable = run_cli('D0Evar("x")')
-        abstraction = run_cli('D0Elam("x", D0Evar("x"))')
+        variable = run_cli('D0Evar("x")', input_text="n\n")
+        abstraction = run_cli('D0Elam("x", D0Evar("x"))', input_text="n\n")
         self.assertEqual(variable.returncode, 0)
         self.assertEqual(abstraction.returncode, 0)
-        self.assertEqual(variable.stdout.strip(), "x")
-        self.assertEqual(abstraction.stdout.strip(), "(lam x. x)")
+        self.assertIn("x\nObserve value? [y/n]: ", variable.stdout)
+        self.assertIn("(lam x. x)\nObserve value? [y/n]: ", abstraction.stdout)
+
+    def test_one_shot_cli_can_observe_a_compiled_boolean(self):
+        result = run_cli("true", input_text="y\n")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("(lam t. (lam f. t))", result.stdout)
+        self.assertTrue(result.stdout.rstrip().endswith("true"), result.stdout)
+
+    def test_one_shot_cli_observes_naturals_and_pairs(self):
+        natural = run_cli("2 + 3", input_text="y\n")
+        pair = run_cli("pair(2, true)", input_text="y\n")
+        self.assertEqual(natural.returncode, 0, natural.stderr)
+        self.assertEqual(pair.returncode, 0, pair.stderr)
+        self.assertTrue(natural.stdout.rstrip().endswith("5"), natural.stdout)
+        self.assertTrue(pair.stdout.rstrip().endswith("(2, true)"), pair.stdout)
+
+    def test_cli_observes_church_notation_abbreviations(self):
+        numeral = run_cli("NUM(2)", input_text="y\n")
+        truth = run_cli("TRUE", input_text="y\n")
+        self.assertEqual(numeral.returncode, 0, numeral.stderr)
+        self.assertEqual(truth.returncode, 0, truth.stderr)
+        self.assertTrue(numeral.stdout.rstrip().endswith("2"), numeral.stdout)
+        self.assertTrue(truth.stdout.rstrip().endswith("true"), truth.stdout)
+
+    def test_observation_prompt_rejects_answers_other_than_y_or_n(self):
+        result = run_cli("true", input_text="maybe\n")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("OBSERVATION ERROR: please answer y or n", result.stdout)
 
     def test_cli_reports_parser_and_compiler_errors(self):
         malformed = run_cli("let x = in x")
@@ -78,7 +102,7 @@ class InteractiveAppTests(unittest.TestCase):
         self.assertIn("COMPILER ERROR:", unsupported.stdout)
 
     def test_interactive_commands_and_eof(self):
-        result = run_cli(input_text=":help\n\nD0Evar(\"x\")\n:exit\n")
+        result = run_cli(input_text=":help\n\nD0Evar(\"x\")\nn\n:exit\n")
         self.assertEqual(result.returncode, 0)
         self.assertGreaterEqual(result.stdout.count("Enter source expressions"), 2)
         self.assertIn("source> x", result.stdout)

@@ -24,8 +24,22 @@ python3 MySolution/app.py '2 + 3 * 4'
 ```
 
 The parser is intentionally a small CLI convenience; library callers should
-continue constructing Assignment 5 AST objects directly. The CLI prints the
-generated target term and does not evaluate or decode it.
+continue constructing Assignment 5 AST objects directly. After printing the
+generated target term, the CLI asks `Observe value? [y/n]:`. Answer `y` to run
+the bounded target evaluator and decode the result as a natural, boolean, or
+nested pair inferred from the source expression; answer `n` to stop after the
+target term. EOF behaves like `n`. For example:
+
+```text
+$ printf 'y\n' | python3 MySolution/app.py true
+(lam t. (lam f. t))
+Observe value? [y/n]: true
+```
+
+Observation uses the same pure target evaluator and the separate observation
+budget below; it never replaces Church reduction with Python computation.
+The specification’s notation abbreviations `NUM(n)`, `TRUE`, and `FALSE` are
+also accepted by the CLI and expand to source literals.
 
 The demo runs DEMO-01 through DEMO-14 and prints each expected value, execution
 status and beta-step count, observation status/count, decoded value, source
@@ -65,6 +79,25 @@ The test files are organized by requirement:
   every supported binary operator, nested constructor expressions, existing
   surface syntax, and compiler diagnostics for negative literals.
 - `tests/test_app.py` black-box tests the interactive CLI with 125 valid inputs.
+
+The explicit mapping from `Assign06.md`'s Testing and correctness argument to
+tests is:
+
+| Assign06 obligation | Test coverage |
+| --- | --- |
+| 1. Substitution shadowing and capture | `test_assign06_requirements.py`, `test_core.py` |
+| 2. Left-to-right/weak CBV, budgets, determinism | `test_assign06_requirements.py`, `test_target_budget.py`, `test_cbv_control.py` |
+| 3. Every constructor/operator, zero, predecessor, comparisons, booleans | `test_assign06_requirements.py`, `test_church_encodings.py`, `test_compiled_purity.py` |
+| 4. Scope, lets, lambdas, fix binders, open terms, collisions, immutability | `test_assign06_requirements.py`, `test_recursion_scope.py`, `test_core.py` |
+| 5. Strict arguments/lets/pairs versus delayed conditionals and booleans | `test_assign06_requirements.py`, `test_cbv_control.py` |
+| 6. Demonstrations, nested pairs, invalid literals/operators | `test_assign06_requirements.py`, `test_nested_pairs.py`, `test_parser_constructors.py` |
+| 7. Pure output, closed combinators, no evaluator during compilation | `test_assign06_requirements.py`, `test_compiled_purity.py`, `test_church_encodings.py` |
+
+`tests/test_assign06_requirements.py` is intentionally separate from the
+focused regression tests so that the assignment's numbered obligations are
+visible during review. It also runs the fourteen cases from `demo.py` as
+unittest assertions. The demo command remains the human-readable report of
+source, target prefix, budgets, statuses, counts, and answers.
 
 The evaluator is intentionally weak CBV and bounded. Open target terms are
 rejected for execution, although compilation and substitution support them.

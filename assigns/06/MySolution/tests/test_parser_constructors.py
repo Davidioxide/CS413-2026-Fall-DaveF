@@ -51,4 +51,10 @@ class ParserConstructorTests(unittest.TestCase):
         self.assertIsNotNone(compile_expr(parse('fix f(x). f')))
         self.assertIsNotNone(compile_expr(parse('pair(fst(pair(1, true)), snd(pair(2, false)))')))
 
+    def test_church_documentation_abbreviations_expand_to_source_literals(self):
+        self.assertEqual(parse('NUM(2)').arg1, 2)
+        self.assertEqual(parse('NUM (0)').arg1, 0)
+        self.assertTrue(parse('TRUE').arg1)
+        self.assertFalse(parse('FALSE').arg1)
+
 if __name__ == "__main__": unittest.main()

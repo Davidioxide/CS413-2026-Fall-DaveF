@@ -75,6 +75,17 @@ class Parser:
         if token.isdigit(): self.take(); return D0Eint(int(token))
         if token == "true": self.take(); return D0Ebtf(True)
         if token == "false": self.take(); return D0Ebtf(False)
+        # The assignment uses NUM(n), TRUE, and FALSE as documentation
+        # abbreviations for Church encodings.  Accepting these spellings in
+        # the CLI keeps the notation useful while still producing ordinary
+        # source AST literals before compilation.
+        if token in {"TRUE", "FALSE"}:
+            self.take(); return D0Ebtf(token == "TRUE")
+        if token == "NUM":
+            self.take(); self.take("("); value = self.take()
+            if not value.isdigit():
+                raise ParseError("PARSER ERROR: NUM expects a natural-number literal")
+            self.take(")"); return D0Eint(int(value))
         if token in ("fst", "snd"):
             self.take(); value = self.atom(); return D0Epfst(value) if token == "fst" else D0Epsnd(value)
         if token == "pair":

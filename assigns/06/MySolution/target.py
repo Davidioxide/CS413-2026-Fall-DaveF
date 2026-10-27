@@ -42,15 +42,28 @@ def rename_bound(t: Term, old: str, new: str) -> Term:
 
 def substitute(t: Term, name: str, replacement: Term) -> Term:
     """Capture-avoiding [replacement/name]t; inputs are immutable."""
-    if isinstance(t, Var): return replacement if t.name == name else t
-    if isinstance(t, App):
-        return App(substitute(t.fn, name, replacement), substitute(t.arg, name, replacement))
-    if t.name == name: return t
-    if t.name in free_vars(replacement) and name in free_vars(t.body):
-        new = fresh_name(all_names(t.body) | all_names(replacement) | {name}, "_a")
-        body = rename_bound(t.body, t.name, new)
-        return Lam(new, substitute(body, name, replacement))
-    return Lam(t.name, substitute(t.body, name, replacement))
+    # Share one freshness set across the entire substitution.  A separate
+    # fresh-name search at each nested binder can otherwise generate the same
+    # name twice in one call, despite the assignment's freshness requirement.
+    used = all_names(t) | all_names(replacement) | {name}
+
+    def fresh() -> str:
+        candidate = fresh_name(used, "_a")
+        used.add(candidate)
+        return candidate
+
+    def go(term: Term) -> Term:
+        if isinstance(term, Var): return replacement if term.name == name else term
+        if isinstance(term, App):
+            return App(go(term.fn), go(term.arg))
+        if term.name == name: return term
+        if term.name in free_vars(replacement) and name in free_vars(term.body):
+            new = fresh()
+            body = rename_bound(term.body, term.name, new)
+            return Lam(new, go(body))
+        return Lam(term.name, go(term.body))
+
+    return go(t)
 
 def render(t: Term) -> str:
     if isinstance(t, Var): return t.name
